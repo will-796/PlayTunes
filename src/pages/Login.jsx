@@ -7,7 +7,7 @@ export default class Login extends Component {
   constructor() {
     super();
     this.state = {
-      inputSearch: '',
+      inputUser: '',
       isButtonDisabled: true,
       loading: false,
       logued: false,
@@ -23,20 +23,20 @@ export default class Login extends Component {
   }
 
   buttonCondition = () => {
-    const { inputSearch } = this.state;
+    const { inputUser } = this.state;
     const inputMinLength = 3;
-    this.setState({ isButtonDisabled: inputSearch.length < inputMinLength });
+    this.setState({ isButtonDisabled: inputUser.length < inputMinLength });
   };
 
   onHandleChange = ({ target }) => {
     const { value } = target;
-    this.setState({ inputSearch: value }, this.buttonCondition);
+    this.setState({ inputUser: value }, this.buttonCondition);
   };
 
   onHandleClick = () => {
     this.setState({ loading: true }, async () => {
-      const { inputSearch } = this.state;
-      await createUser({ name: inputSearch });
+      const { inputUser } = this.state;
+      await createUser({ name: inputUser });
       if (this.isMount) {
         this.setState({ loading: false, logued: true });
       }
@@ -44,7 +44,7 @@ export default class Login extends Component {
   };
 
   render() {
-    const { inputSearch, isButtonDisabled, loading, logued } = this.state;
+    const { inputUser, isButtonDisabled, loading, logued } = this.state;
     return (
       <div data-testid="page-login">
         {logued && <Redirect to="/search" />}
@@ -52,8 +52,8 @@ export default class Login extends Component {
         <input
           data-testid="login-name-input"
           type="text"
-          name="inputSearch"
-          value={ inputSearch }
+          name="inputUser"
+          value={ inputUser }
           onChange={ this.onHandleChange }
         />
         <button
