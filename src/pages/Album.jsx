@@ -4,6 +4,8 @@ import Header from '../components/Header';
 import Loading from '../components/Loading';
 import MusicCard from '../components/MusicCard';
 import getMusics from '../services/musicsAPI';
+import { getFavoriteSongs } from '../services/favoriteSongsAPI';
+// import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 export default class Album extends Component {
   constructor() {
@@ -13,6 +15,7 @@ export default class Album extends Component {
       albumName: '',
       loading: false,
       musicResults: [],
+      favoriteSongs: [],
     };
   }
 
@@ -28,17 +31,19 @@ export default class Album extends Component {
     } = this.props;
     this.setState({ loading: true }, async () => {
       const results = await getMusics(id);
+      const favorite = await getFavoriteSongs();
       this.setState({
         artistName: results[0].artistName,
         albumName: results[0].collectionName,
         musicResults: results,
+        favoriteSongs: favorite,
         loading: false,
       });
     });
   };
 
   render() {
-    const { musicResults, artistName, albumName, loading } = this.state;
+    const { musicResults, artistName, albumName, loading, favoriteSongs } = this.state;
     return (
       <div data-testid="page-album">
         <Header />
@@ -56,6 +61,7 @@ export default class Album extends Component {
                   trackId={ music.trackId }
                   trackName={ music.trackName }
                   previewUrl={ music.previewUrl }
+                  favoriteSongs={ favoriteSongs }
                 />
               ))}
           </div>
