@@ -55,13 +55,16 @@ export default class Album extends Component {
             <p data-testid="album-name">{albumName}</p>
             {musicResults
               .filter((music) => music.kind === 'song')
-              .map((music, index) => (
+              .map((music) => (
                 <MusicCard
-                  key={ index }
+                  key={ music.trackId }
                   trackId={ music.trackId }
                   trackName={ music.trackName }
                   previewUrl={ music.previewUrl }
-                  favoriteSongs={ favoriteSongs }
+                  favoriteSongs={ favoriteSongs.some(
+                    ({ trackId: id }) => id === music.trackId,
+                  ) }
+                  updateFavoriteSongs={ () => {} }
                 />
               ))}
           </div>
