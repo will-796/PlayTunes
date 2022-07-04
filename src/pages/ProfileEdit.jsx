@@ -64,7 +64,6 @@ export default class ProfileEdit extends Component {
 
   render() {
     const { user, loading, isButtonDisabled, redirect } = this.state;
-    console.log(redirect);
     if (redirect) return <Redirect exact to="/profile" />;
     return (
       <div data-testid="page-profile-edit">
