@@ -14,11 +14,6 @@ export default class Favorites extends Component {
     this.fetchApi();
   }
 
-  // componentDidUpdate() {
-  //   this.updateFavoriteSongs();
-  //   console.log('rodei');
-  // }
-
   fetchApi = () => {
     this.setState({ loading: true }, async () => {
       const favoritesSongs = await getFavoriteSongs();
