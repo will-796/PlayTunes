@@ -8,9 +8,9 @@ export default class ProfileEdit extends Component {
   constructor() {
     super();
     this.state = {
-      loading: true,
+      loading: false,
       user: { name: '', email: '', image: '', description: '' },
-      isButtonDisabled: true,
+      isButtonDisabled: false,
       redirect: false,
     };
   }
@@ -29,7 +29,7 @@ export default class ProfileEdit extends Component {
       const { user } = this.state;
       await updateUser(user);
       if (this.isMount) {
-        this.setState({ redirect: true });
+        this.setState({ redirect: true, loading: false });
       }
     });
   };
@@ -50,82 +50,85 @@ export default class ProfileEdit extends Component {
     const { user } = this.state;
     const newUser = { ...user };
     newUser[name] = value;
-    this.setState({ user: newUser }, () => this.setState(
-      {
-        isButtonDisabled: this.validadeForm(),
-      },
-    ));
+    this.setState({ user: newUser }, () => this.setState({
+      isButtonDisabled: this.validadeForm(),
+    }));
   };
 
-  fetchUser = async () => {
-    const user = await getUser();
-    this.setState({ user, loading: false });
+  fetchUser = () => {
+    this.setState({ loading: true }, async () => {
+      const user = await getUser();
+      this.setState({ user, loading: false });
+    });
   };
 
   render() {
     const { user, loading, isButtonDisabled, redirect } = this.state;
-    if (redirect) return (<Redirect to="/profile" />);
+    console.log(redirect);
+    if (redirect) return <Redirect exact to="/profile" />;
     return (
       <div data-testid="page-profile-edit">
-        <Header />
-        {loading ? (
-          <Loading />
-        ) : (
-          <form>
-            <label htmlFor="name">
-              Nome
-              <input
-                data-testid="edit-input-name"
-                type="text"
-                name="name"
-                id="name"
-                onChange={ this.onHandleChange }
-                value={ user.name }
-              />
-            </label>
-            <label htmlFor="email">
-              Email
-              <input
-                data-testid="edit-input-email"
-                type="email"
-                name="email"
-                id="email"
-                onChange={ this.onHandleChange }
-                value={ user.email }
-              />
-            </label>
-            <label htmlFor="image">
-              Imagem
-              <input
-                data-testid="edit-input-image"
-                type="text"
-                name="image"
-                id="image"
-                onChange={ this.onHandleChange }
-                value={ user.image }
-              />
-            </label>
-            <label htmlFor="description">
-              Descrição
-              <input
-                data-testid="edit-input-description"
-                type="text"
-                name="description"
-                id="description"
-                onChange={ this.onHandleChange }
-                value={ user.description }
-              />
-            </label>
-            <button
-              data-testid="edit-button-save"
-              type="button"
-              disabled={ isButtonDisabled }
-              onClick={ this.onSaveButton }
-            >
-              Salvar
-            </button>
-          </form>
-        )}
+        <div>
+          <Header />
+          {loading ? (
+            <Loading />
+          ) : (
+            <form>
+              <label htmlFor="name">
+                Nome
+                <input
+                  data-testid="edit-input-name"
+                  type="text"
+                  name="name"
+                  id="name"
+                  onChange={ this.onHandleChange }
+                  value={ user.name }
+                />
+              </label>
+              <label htmlFor="email">
+                Email
+                <input
+                  data-testid="edit-input-email"
+                  type="email"
+                  name="email"
+                  id="email"
+                  onChange={ this.onHandleChange }
+                  value={ user.email }
+                />
+              </label>
+              <label htmlFor="image">
+                Imagem
+                <input
+                  data-testid="edit-input-image"
+                  type="text"
+                  name="image"
+                  id="image"
+                  onChange={ this.onHandleChange }
+                  value={ user.image }
+                />
+              </label>
+              <label htmlFor="description">
+                Descrição
+                <input
+                  data-testid="edit-input-description"
+                  type="text"
+                  name="description"
+                  id="description"
+                  onChange={ this.onHandleChange }
+                  value={ user.description }
+                />
+              </label>
+              <button
+                data-testid="edit-button-save"
+                type="button"
+                disabled={ isButtonDisabled }
+                onClick={ this.onSaveButton }
+              >
+                Salvar
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     );
   }
